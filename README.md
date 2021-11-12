@@ -8,7 +8,7 @@ This Repo will be mainly used to track admin / back office users operations.
 
 2. In case of RabbitMQ is down microservice will save event to database, audit-common has all code need to be used, you just need to enable @EnableFailedAuditHandler in the application starter.
 
-2.1. audit-api has schudler which will read from failed events database and convert to the main database.
+3. audit-service has schudler which will read from failed events database and convert to the main database.
 
 
 ![https://github.com/simon-atta/audit/blob/386a072ed7e1b02e825f728a0c72c08c47db24bf/Audit.png](https://github.com/simon-atta/audit/blob/386a072ed7e1b02e825f728a0c72c08c47db24bf/Audit.png)
