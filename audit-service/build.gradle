@@ -1,0 +1,178 @@
+buildscript {
+    dependencies {
+        classpath 'io.github.swagger2markup:swagger2markup-gradle-plugin:1.3.3'
+        classpath 'org.asciidoctor:asciidoctorj-epub3:1.5.0-alpha.6'
+    }
+}
+
+plugins {
+    id 'org.asciidoctor.convert' version '1.5.3'
+    id 'org.springframework.boot' version '2.3.9.RELEASE'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://pkgs.dev.azure.com/AVICSS/Backend/_packaging/test/maven/v1'
+        credentials {
+            username "test"
+            password "lj3r3wearz5aqjmjx5xhrmstgfxjxyy72ebhwtxcmybnaes3cgcq"
+        }
+    }
+}
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'io.github.swagger2markup'
+
+wrapper {
+    gradleVersion = '6.8.3'
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+ext {
+    appVersion = project.hasProperty('appVersion') ? project.getProperty('appVersion') : currentVersion
+    set('springCloudVersion', 'Hoxton.SR10')
+    snippetsDir = file('build/generated-snippets')
+}
+
+group = groupIdVar
+version = appVersion
+description = descriptionVar
+
+convertSwagger2markup {
+    dependsOn test
+    swaggerInput file("build/swagger.json").getAbsolutePath()
+    outputDir file("${buildDir}/generated-snippets")
+    config = ['swagger2markup.markupLanguage'                           : 'ASCIIDOC',
+              'swagger2markup.pathsGroupedBy'                           : 'TAGS',
+              'swagger2markup.extensions.springRestDocs.defaultSnippets': true,
+              'swagger2markup.interDocumentCrossReferencesEnabled'      : true]
+}
+
+asciidoctor {
+    attributes 'snippets': snippetsDir
+    inputs.dir snippetsDir
+    sourceDir snippetsDir
+    dependsOn convertSwagger2markup
+    backends 'html5'
+    attributes = [
+            doctype    : 'book',
+            toc        : 'left',
+            toclevels  : '3',
+            numbered   : '',
+            sectlinks  : '',
+            sectanchors: '',
+            hardbreaks : '',
+    ]
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("build/asciidoc/html5") {
+        into 'static/audit/docs'
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+
+    implementation 'com.dis.audit:audit-model:1.0.+'
+    implementation 'com.avicss.exception:exception-handling:1.0.+'
+    implementation 'com.avicss.security:security:1.0.+'
+
+    //Hal links
+    implementation 'de.otto.edison:edison-hal:2.1.0'
+
+    // Web
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Config client
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+    // DevOps
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Eureka
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    // Kubernetes
+    implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes'
+
+    // Feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // Data
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    // Swagger
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    implementation 'com.querydsl:querydsl-mongodb:4.2.1'
+
+    // Common
+    implementation 'org.apache.commons:commons-io:1.3.2'
+    implementation 'org.apache.commons:commons-collections4:4.3'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+
+    // Logs
+    implementation 'net.logstash.logback:logstash-logback-encoder:5.2'
+    implementation 'org.zalando:logbook-spring-boot-starter:2.0.0'
+    implementation 'org.zalando:logbook-json:2.0.0'
+
+    // lombok
+    implementation 'org.projectlombok:lombok:1.18.8'
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // Messaging
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+    // Testing
+    testImplementation('org.junit.jupiter:junit-jupiter:5.7.1')
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: "junit", module: "junit"
+    }
+    testImplementation 'org.springframework:spring-test'
+
+    // Container
+    testImplementation 'org.testcontainers:junit-jupiter:1.15.2'
+    testImplementation 'org.testcontainers:mongodb:1.15.2'
+    testImplementation 'org.testcontainers:spock:1.15.2'
+    testImplementation 'org.testcontainers:mysql:1.15.2'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+}
+
+
+
+
+
+
+

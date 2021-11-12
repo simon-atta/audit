@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: audit-service
+
+  cloud:
+    config:
+      fail-fast: false
+      enabled: true
+      name: audit-service,database,rabbitmq
+      label: master

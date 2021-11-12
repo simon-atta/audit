@@ -1,0 +1,72 @@
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+  <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+  <property name="STE_EXCLUSIONS" value="\$\$FastClassByCGLIB\$\$,\$\$EnhancerBySpringCGLIB\$\$,^sun\.reflect\..*\.invoke,^com\.sun\.,^sun\.net\.,^net\.sf\.cglib\.proxy\.MethodProxy\.invoke,^org\.springframework\.cglib\.,^org\.springframework\.transaction\.,^org\.springframework\.validation\.,^org\.springframework\.app\.,^org\.springframework\.aop\.,^java\.lang\.reflect\.Method\.invoke,^org\.springframework\.ws\..*\.invoke,^org\.springframework\.ws\.transport\.,^org\.springframework\.ws\.soap\.saaj\.SaajSoapMessage\.,^org\.springframework\.ws\.client\.core\.WebServiceTemplate\.,^org\.springframework\.web\.filter\.,^org\.apache\.tomcat\.,^org\.apache\.catalina\.,^org\.apache\.coyote\.,^java\.util\.concurrent\.ThreadPoolExecutor\.runWorker,^java\.lang\.Thread\.run$"/>
+
+  <springProperty scope="context" name="Service" source="spring.application.name" />
+  <springProperty scope="context" name="Profiles" source="spring.profiles.active" />
+
+  <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <fieldNames>
+        <levelValue>[ignore]</levelValue>
+      </fieldNames>
+      <provider class="net.logstash.logback.composite.loggingevent.StackHashJsonProvider">
+        <exclusions>${STE_EXCLUSIONS}</exclusions>
+      </provider>
+      <shortenedLoggerNameLength>36</shortenedLoggerNameLength>
+      <springProfile name="prettylog">
+        <jsonGeneratorDecorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+      </springProfile>
+      <excludeMdcKeyName>spanExportable</excludeMdcKeyName>
+      <excludeMdcKeyName>X-Span-Export</excludeMdcKeyName>
+      <excludeMdcKeyName>X-B3-ParentSpanId</excludeMdcKeyName>
+      <excludeMdcKeyName>X-B3-SpanId</excludeMdcKeyName>
+      <excludeMdcKeyName>X-B3-TraceId</excludeMdcKeyName>
+      <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+        <maxDepthPerThrowable>20</maxDepthPerThrowable>
+        <maxLength>2048</maxLength>
+        <shortenedClassNameLength>20</shortenedClassNameLength>
+        <exclusions>${STE_EXCLUSIONS}</exclusions>
+        <rootCauseFirst>true</rootCauseFirst>
+        <inlineHash>true</inlineHash>
+      </throwableConverter>
+    </encoder>
+  </appender>
+
+  <appender name="jsonFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <fieldNames>
+        <levelValue>[ignore]</levelValue>
+      </fieldNames>
+      <provider class="net.logstash.logback.composite.loggingevent.StackHashJsonProvider">
+        <exclusions>${STE_EXCLUSIONS}</exclusions>
+      </provider>
+      <shortenedLoggerNameLength>36</shortenedLoggerNameLength>
+      <excludeMdcKeyName>spanExportable</excludeMdcKeyName>
+      <excludeMdcKeyName>X-Span-Export</excludeMdcKeyName>
+      <excludeMdcKeyName>X-B3-ParentSpanId</excludeMdcKeyName>
+      <excludeMdcKeyName>X-B3-SpanId</excludeMdcKeyName>
+      <excludeMdcKeyName>X-B3-TraceId</excludeMdcKeyName>
+      <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+        <maxDepthPerThrowable>20</maxDepthPerThrowable>
+        <maxLength>2048</maxLength>
+        <shortenedClassNameLength>20</shortenedClassNameLength>
+        <exclusions>${STE_EXCLUSIONS}</exclusions>
+        <rootCauseFirst>true</rootCauseFirst>
+        <inlineHash>true</inlineHash>
+      </throwableConverter>
+    </encoder>
+    <file>${LOG_FILE}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+      <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+      <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="jsonConsoleAppender" />
+    <appender-ref ref="jsonFileAppender" />
+  </root>
+</configuration>

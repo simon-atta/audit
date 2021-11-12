@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: user-service
+
+  cloud:
+    config:
+      fail-fast: false
+      enabled: false
+      name: user-service,database
+      label: master
