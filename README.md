@@ -1,4 +1,15 @@
-# Audit service
+# Audit
+
+This Repo is used to log audit for any data operation accross the system. i.e. Entity Country have been change by user X at this time.
+
+This Repo will be mainly used to track admin / back office users operations.
+
+1. Microservice will publish event for CREATE, UPDATE, DELETE of any entity. aduit-common has all model, mapper need to be used by microserice
+
+2. In case of RabbitMQ is down microservice will save event to database, audit-common has all code need to be used, you just need to enable @EnableFailedAuditHandler in the application starter.
+
+2.1. audit-api has schudler which will read from failed events database and convert to the main database.
+
 
 ![https://github.com/simon-atta/audit/blob/386a072ed7e1b02e825f728a0c72c08c47db24bf/Audit.png](https://github.com/simon-atta/audit/blob/386a072ed7e1b02e825f728a0c72c08c47db24bf/Audit.png)
 
@@ -8,25 +19,21 @@
 * Core framework: Spring Boot 2 with Spring Framework 5
 * Web framework: Spring MVC
 * Persistence : MongoDB Data JPA
-* Databases: MongoDB , TestContainers
-* Build: Gradle Script with the Kotlin DSL
-* Testing: Junit 5, Mockito and AssertJ
-* Messaging: rabbit MQ
+* Databases: MongoDB , MySql , TestContainers
+* Build: Gradle Script
+* Testing: Junit 5, Mockito
+* Messaging: Rabbit MQ
 
 ## Running site configuration locally
 
 ### With gradle command line
 
 ```
-git clone https://github.com/AVICSS/audit-service.git
+git clone https://github.com/simon-atta/audit
 cd audit-service
 ./gradlew bootRun
 ```
 
-### With Docker
 
-```
-docker run -p 8080:8080 avicss/audit-service
-```
 
 You can then access site configuration here: [http://localhost:8080/]()
