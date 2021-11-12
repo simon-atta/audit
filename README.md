@@ -1,6 +1,6 @@
 # Audit service
 
-![https://github.com/simon-atta/audit/blob/master/Audit.png](https://github.com/simon-atta/audit/blob/master/Audit.png.png)
+![https://github.com/simon-atta/audit/blob/386a072ed7e1b02e825f728a0c72c08c47db24bf/Audit.png](https://github.com/simon-atta/audit/blob/386a072ed7e1b02e825f728a0c72c08c47db24bf/Audit.png)
 
 ## Technologies
 
