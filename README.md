@@ -26,9 +26,13 @@ This Repo will be mainly used to track admin / back office users operations.
 
 ## Running site configuration locally
 
-### Spain rabbitmq instance
+### Docker
 
 You can use this docker compose https://github.com/simon-atta/docker-compose/tree/master/rabbitmq to start rabbitmq instance.
+
+### Kubernetes/Openshit
+
+You can use helm chart https://github.com/simon-atta/helm/tree/master/rabbitmq
 
 ### With gradle command line
 
