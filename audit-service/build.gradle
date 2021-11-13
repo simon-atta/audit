@@ -96,9 +96,8 @@ dependencyManagement {
 
 dependencies {
 
-    implementation 'com.dis.audit:audit-model:1.0.+'
-    implementation 'com.avicss.exception:exception-handling:1.0.+'
-    implementation 'com.avicss.security:security:1.0.+'
+    implementation 'com.dis.audit.common:audit-common:1.0.+'
+    implementation 'com.dis.exception:exception-handling:1.0.+'
 
     //Hal links
     implementation 'de.otto.edison:edison-hal:2.1.0'
@@ -107,8 +106,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // Config client
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
     // DevOps
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -148,9 +145,6 @@ dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
-    // Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     // Messaging
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
