@@ -24,7 +24,9 @@ This Repo will be mainly used to track admin / back office users operations.
 * Testing: Junit 5, Mockito
 * Messaging: Rabbit MQ
 
-## Running site configuration locally
+## Prerequisites
+
+You need rabbitmq in order to run this solution. In order to do this run it either with docker or Kubernetes/Openshit
 
 ### Docker
 
@@ -33,6 +35,8 @@ You can use this docker compose https://github.com/simon-atta/docker-compose/tre
 ### Kubernetes/Openshit
 
 You can use helm chart https://github.com/simon-atta/helm/tree/master/rabbitmq
+
+## Running site configuration locally
 
 ### With gradle command line
 
