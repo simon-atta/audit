@@ -13,6 +13,9 @@ This Repo will be mainly used to track admin / back office users operations.
 
 ![https://github.com/simon-atta/audit/blob/386a072ed7e1b02e825f728a0c72c08c47db24bf/Audit.png](https://github.com/simon-atta/audit/blob/386a072ed7e1b02e825f728a0c72c08c47db24bf/Audit.png)
 
+![image](https://github.com/simon-atta/audit/assets/46961254/2aff53a7-8246-4e1f-a6b2-ce93c37e1e3b)
+
+
 
 ## Technologies
 
